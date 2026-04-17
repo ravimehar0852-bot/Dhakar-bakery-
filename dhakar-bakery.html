@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dhakar Bakery — Baked with Love</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FDF6EC;
+    --warm-white: #FFFAF4;
+    --caramel: #C8813A;
+    --caramel-dark: #9E5F1F;
+    --caramel-light: #E8B07A;
+    --brown: #4A2C0A;
+    --brown-light: #6B4226;
+    --text: #2E1A08;
+    --text-muted: #7A5C3E;
+    --border: #E8D5BC;
+    --shadow: 0 4px 24px rgba(74,44,10,0.10);
+    --radius: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--warm-white);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(253,246,236,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--caramel-dark);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .nav-logo span { color: var(--brown); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--caramel-dark); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--brown); border-radius: 2px; transition: all 0.3s; }
+
+  /* ── SECTIONS ── */
+  section { display: none; min-height: 100vh; padding-top: 68px; }
+  section.active { display: block; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all 0.25s;
+  }
+  .btn-primary { background: var(--caramel); color: #fff; }
+  .btn-primary:hover { background: var(--caramel-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,129,58,0.35); }
+  .btn-outline { background: transparent; color: var(--caramel-dark); border: 2px solid var(--caramel); }
+  .btn-outline:hover { background: var(--caramel); color: #fff; transform: translateY(-2px); }
+
+  /* ═══════════════════════════
+     HOME
+  ═══════════════════════════ */
+  #home { padding-top: 0; }
+
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #FDF0DC 0%, #F5E1C0 60%, #EAC99A 100%);
+    display: flex; align-items: center;
+    padding: 100px 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C8813A' fill-opacity='0.06'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; width: 100%; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(200,129,58,0.15);
+    color: var(--caramel-dark);
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    color: var(--brown);
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 em { color: var(--caramel-dark); font-style: italic; }
+  .hero p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 440px; font-weight: 300; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .hero-visual {
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .hero-circle {
+    width: min(420px, 90vw);
+    height: min(420px, 90vw);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #F5E1C0, #C8813A 90%);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 20px 60px rgba(200,129,58,0.3);
+    font-size: clamp(7rem, 18vw, 11rem);
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+
+  .features { background: var(--warm-white); padding: 5rem 2rem; }
+  .features-inner { max-width: 1100px; margin: 0 auto; }
+  .section-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 2.8rem); color: var(--brown); margin-bottom: 1rem; }
+  .section-sub { color: var(--text-muted); max-width: 520px; font-size: 1.05rem; margin-bottom: 3rem; font-weight: 300; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+  .feature-card {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+  .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .feature-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--brown); margin-bottom: 0.5rem; }
+  .feature-card p { font-size: 0.95rem; color: var(--text-muted); }
+
+  .testimonial-strip { background: var(--caramel); padding: 3.5rem 2rem; text-align: center; }
+  .testimonial-strip blockquote { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem, 3vw, 2rem); color: #fff; max-width: 700px; margin: 0 auto 1rem; font-style: italic; }
+  .testimonial-strip cite { color: rgba(255,255,255,0.75); font-size: 0.9rem; font-style: normal; }
+
+  /* ═══════════════════════════
+     MENU
+  ═══════════════════════════ */
+  #menu { background: var(--cream); }
+  .menu-hero { background: var(--brown); padding: 5rem 2rem 4rem; text-align: center; }
+  .menu-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 3.5rem); color: var(--cream); margin-bottom: 0.75rem; }
+  .menu-hero p { color: var(--caramel-light); font-size: 1.1rem; font-weight: 300; }
+
+  .menu-content { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .menu-tabs { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 3rem; }
+  .menu-tab {
+    padding: 0.6rem 1.5rem; border-radius: 50px;
+    border: 2px solid var(--border);
+    background: #fff; color: var(--text-muted);
+    font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .menu-tab.active, .menu-tab:hover { background: var(--caramel); border-color: var(--caramel); color: #fff; }
+
+  .menu-category { display: none; }
+  .menu-category.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .menu-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .menu-item:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+  .menu-item-img { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: var(--cream); }
+  .menu-item-body { padding: 1.25rem; }
+  .menu-item-body h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--brown); margin-bottom: 0.4rem; }
+  .menu-item-body p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.9rem; font-weight: 300; }
+  .menu-item-footer { display: flex; align-items: center; justify-content: space-between; }
+  .price { font-weight: 700; font-size: 1.1rem; color: var(--caramel-dark); }
+  .badge-new { background: var(--caramel); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 50px; letter-spacing: 0.08em; }
+
+  /* ═══════════════════════════
+     ABOUT
+  ═══════════════════════════ */
+  #about { background: var(--warm-white); }
+  .about-hero { background: linear-gradient(120deg, #4A2C0A, #7A4E2D); padding: 5rem 2rem 4rem; text-align: center; }
+  .about-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem,5vw,3.5rem); color: var(--cream); margin-bottom: 0.75rem; }
+  .about-hero p { color: var(--caramel-light); font-size: 1.1rem; font-weight: 300; }
+
+  .about-content { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-bottom: 5rem; }
+  .about-visual { display: flex; align-items: center; justify-content: center; }
+  .about-emblem {
+    width: 320px; height: 320px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--caramel-light), var(--caramel-dark));
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #fff; text-align: center; padding: 2rem;
+    box-shadow: 0 20px 60px rgba(200,129,58,0.3);
+  }
+  .about-emblem .year { font-size: 3rem; font-family: 'Playfair Display', serif; font-weight: 700; }
+  .about-emblem .est { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.8; }
+  .about-text h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--brown); margin-bottom: 1rem; }
+  .about-text p { color: var(--text-muted); margin-bottom: 1rem; font-weight: 300; font-size: 1.05rem; }
+  .about-text p:last-child { margin-bottom: 0; }
+
+  .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+  .value-card {
+    text-align: center; padding: 2.5rem 1.5rem;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--cream);
+  }
+  .value-card .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .value-card h3 { font-family: 'Playfair Display', serif; color: var(--brown); margin-bottom: 0.5rem; }
+  .value-card p { font-size: 0.9rem; color: var(--text-muted); }
+
+  /* ═══════════════════════════
+     GALLERY
+  ═══════════════════════════ */
+  #gallery { background: var(--brown); }
+  .gallery-hero { padding: 5rem 2rem 4rem; text-align: center; }
+  .gallery-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem,5vw,3.5rem); color: var(--cream); margin-bottom: 0.75rem; }
+  .gallery-hero p { color: var(--caramel-light); font-size: 1.1rem; font-weight: 300; }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 220px);
+    gap: 12px;
+    padding: 0 1.5rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .gallery-cell {
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.25s;
+  }
+  .gallery-cell:hover { transform: scale(1.02); z-index: 2; }
+  .gallery-cell span { position: relative; z-index: 1; }
+  .gallery-cell .overlay {
+    position: absolute; inset: 0;
+    background: rgba(74,44,10,0); display: flex; align-items: center; justify-content: center;
+    transition: background 0.25s;
+  }
+  .gallery-cell:hover .overlay { background: rgba(74,44,10,0.4); }
+  .overlay-label { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.1rem; opacity: 0; transition: opacity 0.25s; }
+  .gallery-cell:hover .overlay-label { opacity: 1; }
+
+  .gc1 { background: linear-gradient(135deg, #F5C77E, #E8A040); grid-column: 1; grid-row: 1; }
+  .gc2 { background: linear-gradient(135deg, #D4A0A0, #C06060); grid-column: 2; grid-row: 1; }
+  .gc3 { background: linear-gradient(135deg, #A0C8A0, #60A060); grid-column: 3; grid-row: 1/3; font-size: 6rem; }
+  .gc4 { background: linear-gradient(135deg, #C8A070, #9E6E40); grid-column: 1; grid-row: 2/4; font-size: 6rem; }
+  .gc5 { background: linear-gradient(135deg, #F0D090, #C8A030); grid-column: 2; grid-row: 2; }
+  .gc6 { background: linear-gradient(135deg, #E0B0A0, #C08060); grid-column: 2/4; grid-row: 3; font-size: 5rem; }
+
+  /* ═══════════════════════════
+     CONTACT
+  ═══════════════════════════ */
+  #contact { background: var(--cream); }
+  .contact-hero { background: linear-gradient(120deg, #C8813A, #9E5F1F); padding: 5rem 2rem 4rem; text-align: center; }
+  .contact-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem,5vw,3.5rem); color: #fff; margin-bottom: 0.75rem; }
+  .contact-hero p { color: rgba(255,255,255,0.8); font-size: 1.1rem; font-weight: 300; }
+
+  .contact-content { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; }
+  .contact-info h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--brown); margin-bottom: 1.5rem; }
+  .info-item { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.5rem; }
+  .info-icon { font-size: 1.4rem; margin-top: 2px; flex-shrink: 0; }
+  .info-item h4 { font-weight: 700; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--caramel-dark); margin-bottom: 0.2rem; }
+  .info-item p { color: var(--text-muted); font-size: 0.95rem; }
+
+  .contact-form { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 2.5rem; }
+  .contact-form h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--brown); margin-bottom: 1.5rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--caramel-dark); margin-bottom: 0.4rem; }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%; padding: 0.75rem 1rem;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: 'Lato', sans-serif; font-size: 0.95rem; color: var(--text);
+    background: var(--cream); outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--caramel); }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+  .form-success { display: none; text-align: center; padding: 2rem; }
+  .form-success .check { font-size: 3rem; margin-bottom: 1rem; }
+  .form-success h3 { font-family: 'Playfair Display', serif; color: var(--brown); margin-bottom: 0.5rem; }
+  .form-success p { color: var(--text-muted); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--brown);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.875rem;
+  }
+  footer a { color: var(--caramel-light); text-decoration: none; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--cream); margin-bottom: 0.5rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: var(--cream); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; gap: 1.25rem; }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+    .hero-visual { order: -1; }
+    .hero p { margin-left: auto; margin-right: auto; }
+    .hero-btns { justify-content: center; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-visual { order: -1; }
+    .about-emblem { width: 240px; height: 240px; }
+    .contact-content { grid-template-columns: 1fr; gap: 2.5rem; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .gc3, .gc4 { grid-row: auto; grid-column: auto; }
+    .gc6 { grid-column: auto; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showSection('home')">Dhakar <span>Bakery</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" onclick="showSection('home')" data-page="home">Home</a></li>
+    <li><a href="#" onclick="showSection('menu')" data-page="menu">Menu</a></li>
+    <li><a href="#" onclick="showSection('about')" data-page="about">About</a></li>
+    <li><a href="#" onclick="showSection('gallery')" data-page="gallery">Gallery</a></li>
+    <li><a href="#" onclick="showSection('contact')" data-page="contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ═══ HOME ═══ -->
+<section id="home" class="active">
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">🏠 Local & Loved Since 2009</div>
+        <h1>Baked with <em>Heart</em>,<br>Made for You</h1>
+        <p>Dhakar Bakery brings the warmth of traditional recipes to every loaf, pastry, and cake — crafted fresh every morning in our family kitchen.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" onclick="showSection('menu')">Explore Our Menu</button>
+          <button class="btn btn-outline" onclick="showSection('contact')">Order Now</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-circle">🍞</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="features-inner">
+      <div class="section-label">Why Choose Us</div>
+      <h2 class="section-title">More than just a bakery</h2>
+      <p class="section-sub">Every bite tells a story — one baked with fresh, local ingredients and a whole lot of love.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🌾</div>
+          <h3>Fresh Ingredients</h3>
+          <p>We source the finest local flour, dairy, and produce — no shortcuts, ever.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🕰️</div>
+          <h3>Baked Daily</h3>
+          <p>Everything is made fresh each morning so you always get the best flavour.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎂</div>
+          <h3>Custom Orders</h3>
+          <p>Birthdays, weddings, or office parties — we craft cakes for every occasion.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Home Delivery</h3>
+          <p>Warm, fresh pastries delivered right to your doorstep — anytime you want.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="testimonial-strip">
+    <blockquote>"The croissants at Dhakar Bakery are pure magic — flaky, buttery, and gone in seconds."</blockquote>
+    <cite>— Priya Mehta, Regular Customer</cite>
+  </div>
+  <footer>
+    <div class="footer-logo">Dhakar Bakery</div>
+    <p>© 2025 Dhakar Bakery. All rights reserved. | <a href="#" onclick="showSection('contact')">Contact us</a></p>
+  </footer>
+</section>
+
+<!-- ═══ MENU ═══ -->
+<section id="menu">
+  <div class="menu-hero">
+    <h1>Our Menu</h1>
+    <p>Fresh bakes, everyday favourites & seasonal specials</p>
+  </div>
+  <div class="menu-content">
+    <div class="menu-tabs">
+      <button class="menu-tab active" onclick="switchTab('breads', this)">🍞 Breads</button>
+      <button class="menu-tab" onclick="switchTab('pastries', this)">🥐 Pastries</button>
+      <button class="menu-tab" onclick="switchTab('cakes', this)">🎂 Cakes</button>
+      <button class="menu-tab" onclick="switchTab('drinks', this)">☕ Drinks</button>
+    </div>
+
+    <div class="menu-category active" id="cat-breads">
+      <div class="menu-item"><div class="menu-item-img">🍞</div><div class="menu-item-body"><h3>Classic White Loaf</h3><p>Soft, fluffy, and perfect for every meal</p><div class="menu-item-footer"><span class="price">₹60</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🫓</div><div class="menu-item-body"><h3>Whole Wheat Bread</h3><p>Nutritious and hearty, made with stone-ground flour</p><div class="menu-item-footer"><span class="price">₹75</span><span class="badge-new">Bestseller</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🍞</div><div class="menu-item-body"><h3>Garlic Herb Focaccia</h3><p>Italian-style with rosemary, garlic & olive oil</p><div class="menu-item-footer"><span class="price">₹120</span><span class="badge-new">New</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🥖</div><div class="menu-item-body"><h3>French Baguette</h3><p>Crispy crust, airy crumb — a breakfast staple</p><div class="menu-item-footer"><span class="price">₹90</span></div></div></div>
+    </div>
+
+    <div class="menu-category" id="cat-pastries">
+      <div class="menu-item"><div class="menu-item-img">🥐</div><div class="menu-item-body"><h3>Butter Croissant</h3><p>72-hour laminated dough, deeply golden</p><div class="menu-item-footer"><span class="price">₹85</span><span class="badge-new">Bestseller</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🧇</div><div class="menu-item-body"><h3>Pain au Chocolat</h3><p>Flaky pastry wrapped around dark chocolate</p><div class="menu-item-footer"><span class="price">₹95</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🥧</div><div class="menu-item-body"><h3>Apple Tart</h3><p>Thin crust, caramelised apples, hint of cinnamon</p><div class="menu-item-footer"><span class="price">₹110</span><span class="badge-new">Seasonal</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🍩</div><div class="menu-item-body"><h3>Cinnamon Roll</h3><p>Soft, gooey, and drenched in cream cheese glaze</p><div class="menu-item-footer"><span class="price">₹80</span></div></div></div>
+    </div>
+
+    <div class="menu-category" id="cat-cakes">
+      <div class="menu-item"><div class="menu-item-img">🎂</div><div class="menu-item-body"><h3>Classic Black Forest</h3><p>Layers of chocolate sponge, cream & cherries</p><div class="menu-item-footer"><span class="price">₹650/kg</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🍰</div><div class="menu-item-body"><h3>Vanilla Sponge</h3><p>Light, moist, with whipped cream frosting</p><div class="menu-item-footer"><span class="price">₹550/kg</span><span class="badge-new">Bestseller</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🍫</div><div class="menu-item-body"><h3>Chocolate Fudge Cake</h3><p>Rich ganache, intense cocoa, serves 8</p><div class="menu-item-footer"><span class="price">₹750/kg</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🎂</div><div class="menu-item-body"><h3>Custom Celebration Cake</h3><p>Designed just for you — contact us to order</p><div class="menu-item-footer"><span class="price">From ₹900</span><span class="badge-new">Custom</span></div></div></div>
+    </div>
+
+    <div class="menu-category" id="cat-drinks">
+      <div class="menu-item"><div class="menu-item-img">☕</div><div class="menu-item-body"><h3>Filter Coffee</h3><p>Strong South Indian-style brew with frothy milk</p><div class="menu-item-footer"><span class="price">₹40</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🍵</div><div class="menu-item-body"><h3>Masala Chai</h3><p>Spiced, aromatic, the perfect companion to any bake</p><div class="menu-item-footer"><span class="price">₹35</span><span class="badge-new">Bestseller</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🥛</div><div class="menu-item-body"><h3>Fresh Milk</h3><p>Cold or warm, sourced from local farms daily</p><div class="menu-item-footer"><span class="price">₹30</span></div></div></div>
+      <div class="menu-item"><div class="menu-item-img">🧃</div><div class="menu-item-body"><h3>Fresh Juice</h3><p>Seasonal fruits, pressed to order — no added sugar</p><div class="menu-item-footer"><span class="price">₹55</span></div></div></div>
+    </div>
+  </div>
+  <footer style="background: var(--brown); color: rgba(255,255,255,0.6); text-align:center; padding:2rem; font-size:0.875rem;">
+    <div class="footer-logo">Dhakar Bakery</div>
+    <p>© 2025 Dhakar Bakery. All rights reserved.</p>
+  </footer>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="about-hero">
+    <h1>Our Story</h1>
+    <p>A family tradition, baked into every loaf</p>
+  </div>
+  <div class="about-content">
+    <div class="about-grid">
+      <div class="about-visual">
+        <div class="about-emblem">
+          <div class="year">2009</div>
+          <div class="est">Est. · Jodhpur</div>
+        </div>
+      </div>
+      <div class="about-text">
+        <h2>Born in a Home Kitchen</h2>
+        <p>Dhakar Bakery started as a simple dream in 2009 — our founder Ramesh Dhakar baked his grandmother's bread recipes every Sunday, filling the neighbourhood with an irresistible aroma.</p>
+        <p>What started with a small counter and a coal-fired oven has grown into a beloved local institution. Today we serve over 300 families every day, but our values haven't changed a bit.</p>
+        <p>Every bake is still made by hand, with the same love and the same recipes that made our neighbours knock on the door fifteen years ago.</p>
+      </div>
+    </div>
+
+    <div class="section-label" style="text-align:center; margin-bottom:0.5rem;">What We Stand For</div>
+    <h2 class="section-title" style="text-align:center; margin-bottom:2.5rem;">Our Values</h2>
+    <div class="values-grid">
+      <div class="value-card"><div class="icon">❤️</div><h3>Made with Love</h3><p>Every product carries the care of someone who genuinely loves to bake.</p></div>
+      <div class="value-card"><div class="icon">🌿</div><h3>Natural Ingredients</h3><p>No preservatives, no artificial flavours — just real, wholesome food.</p></div>
+      <div class="value-card"><div class="icon">🤝</div><h3>Community First</h3><p>We support local farmers and give back to the neighbourhood that raised us.</p></div>
+      <div class="value-card"><div class="icon">⭐</div><h3>Consistent Quality</h3><p>Rain or shine, every loaf meets the same high standard — guaranteed.</p></div>
+    </div>
+  </div>
+  <footer style="background: var(--brown); color: rgba(255,255,255,0.6); text-align:center; padding:2rem; font-size:0.875rem;">
+    <div class="footer-logo">Dhakar Bakery</div>
+    <p>© 2025 Dhakar Bakery. All rights reserved.</p>
+  </footer>
+</section>
+
+<!-- ═══ GALLERY ═══ -->
+<section id="gallery">
+  <div class="gallery-hero">
+    <h1>Gallery</h1>
+    <p>A glimpse of what comes out of our oven every day</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-cell gc1"><span>🥐</span><div class="overlay"><span class="overlay-label">Croissants</span></div></div>
+    <div class="gallery-cell gc2"><span>🎂</span><div class="overlay"><span class="overlay-label">Celebration Cakes</span></div></div>
+    <div class="gallery-cell gc3"><span>🌿</span><div class="overlay"><span class="overlay-label">Fresh Herbs</span></div></div>
+    <div class="gallery-cell gc4"><span>🍞</span><div class="overlay"><span class="overlay-label">Artisan Breads</span></div></div>
+    <div class="gallery-cell gc5"><span>🍰</span><div class="overlay"><span class="overlay-label">Pastries</span></div></div>
+    <div class="gallery-cell gc6"><span>☕</span><div class="overlay"><span class="overlay-label">Coffee & Treats</span></div></div>
+  </div>
+  <footer style="background: rgba(0,0,0,0.3); color: rgba(255,255,255,0.5); text-align:center; padding:2rem; font-size:0.875rem;">
+    <div style="font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--cream); margin-bottom:0.5rem;">Dhakar Bakery</div>
+    <p>© 2025 Dhakar Bakery. All rights reserved.</p>
+  </footer>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="contact-hero">
+    <h1>Get in Touch</h1>
+    <p>We'd love to hear from you — order, enquire, or just say hello!</p>
+  </div>
+  <div class="contact-content">
+    <div class="contact-info">
+      <h2>Visit Us</h2>
+      <div class="info-item">
+        <div class="info-icon">📍</div>
+        <div>
+          <h4>Address</h4>
+          <p>12, Sardar Market Lane,<br>Near Clock Tower, Jodhpur,<br>Rajasthan 342001</p>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">⏰</div>
+        <div>
+          <h4>Opening Hours</h4>
+          <p>Monday – Saturday: 7:00 AM – 9:00 PM<br>Sunday: 8:00 AM – 6:00 PM</p>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">📞</div>
+        <div>
+          <h4>Phone</h4>
+          <p>+91 94600 12345</p>
+        </div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">✉️</div>
+        <div>
+          <h4>Email</h4>
+          <p>hello@dhakarbakery.in</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h2>Send a Message</h2>
+      <div id="formArea">
+        <div class="form-row">
+          <div class="form-group"><label>Your Name</label><input type="text" placeholder="Ramesh Kumar"></div>
+          <div class="form-group"><label>Phone</label><input type="tel" placeholder="+91 98765 43210"></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="you@email.com"></div>
+        <div class="form-group">
+          <label>Enquiry Type</label>
+          <select>
+            <option>General Enquiry</option>
+            <option>Custom Cake Order</option>
+            <option>Bulk / Catering Order</option>
+            <option>Delivery Query</option>
+            <option>Feedback</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Message</label><textarea placeholder="Tell us what you need…"></textarea></div>
+        <button class="btn btn-primary" style="width:100%;" onclick="submitForm()">Send Message</button>
+      </div>
+      <div class="form-success" id="formSuccess">
+        <div class="check">✅</div>
+        <h3>Message Sent!</h3>
+        <p>Thank you for reaching out. We'll get back to you within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+  <footer style="background: var(--brown); color: rgba(255,255,255,0.6); text-align:center; padding:2rem; font-size:0.875rem;">
+    <div class="footer-logo">Dhakar Bakery</div>
+    <p>© 2025 Dhakar Bakery. All rights reserved.</p>
+  </footer>
+</section>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.dataset.page === id);
+    });
+    document.getElementById('navLinks').classList.remove('open');
+    window.scrollTo(0, 0);
+    return false;
+  }
+
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  function switchTab(cat, el) {
+    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.menu-category').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('cat-' + cat).classList.add('active');
+  }
+
+  function submitForm() {
+    document.getElementById('formArea').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', e => { e.preventDefault(); showSection(a.dataset.page); });
+  });
+  document.querySelector('.nav-logo').addEventListener('click', e => { e.preventDefault(); showSection('home'); });
+</script>
+</body>
+</html>
